@@ -1,7 +1,11 @@
 import { ExternalLink, Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useScrollAnimation } from "@/hooks/use-scroll-animation";
+import { cn } from "@/lib/utils";
 
 const Projects = () => {
+  const { ref: sectionRef, isVisible } = useScrollAnimation();
+  
   const projects = [
     {
       title: "E-Commerce Platform",
@@ -30,8 +34,11 @@ const Projects = () => {
   ];
 
   return (
-    <section id="projects" className="py-24 bg-muted/30">
-      <div className="container mx-auto px-6">
+    <section id="projects" className="py-24 bg-muted/30 relative overflow-hidden">
+      {/* Floating decorations */}
+      <div className="absolute top-1/4 left-0 w-72 h-72 bg-accent/5 rounded-full blur-3xl animate-float" />
+      
+      <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 space-y-4">
             <h2 className="text-4xl md:text-5xl font-bold">
@@ -42,12 +49,15 @@ const Projects = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div ref={sectionRef} className="grid md:grid-cols-2 gap-8">
             {projects.map((project, index) => (
               <div
                 key={index}
-                className="group relative overflow-hidden rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-soft animate-fade-in-up"
-                style={{ animationDelay: `${index * 0.1}s` }}
+                className={cn(
+                  "group relative overflow-hidden rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-500 hover:shadow-soft hover:scale-105",
+                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+                )}
+                style={{ transitionDelay: `${index * 0.1}s` }}
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-5 group-hover:opacity-10 transition-opacity duration-300`} />
                 
@@ -65,7 +75,7 @@ const Projects = () => {
                     {project.tags.map((tag, tagIndex) => (
                       <span
                         key={tagIndex}
-                        className="px-3 py-1 rounded-md bg-muted text-sm font-medium"
+                        className="px-3 py-1 rounded-md bg-muted text-sm font-medium hover:bg-primary/10 hover:text-primary transition-all duration-300 hover:scale-110"
                       >
                         {tag}
                       </span>
@@ -76,14 +86,14 @@ const Projects = () => {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="border-primary text-primary hover:bg-primary/10"
+                      className="border-primary text-primary hover:bg-primary/10 hover:scale-105 transition-all duration-300"
                     >
                       <Github className="w-4 h-4 mr-2" />
                       Code
                     </Button>
                     <Button
                       size="sm"
-                      className="bg-gradient-to-r from-primary to-accent hover:shadow-glow"
+                      className="bg-gradient-to-r from-primary to-accent hover:shadow-glow hover:scale-105 transition-all duration-300"
                     >
                       <ExternalLink className="w-4 h-4 mr-2" />
                       Demo

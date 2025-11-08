@@ -12,7 +12,11 @@ const Hero = () => {
       className="min-h-screen flex items-center justify-center relative overflow-hidden"
     >
       {/* Animated background gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,hsl(var(--primary)/0.15),transparent_50%),radial-gradient(circle_at_70%_50%,hsl(var(--accent)/0.1),transparent_50%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,hsl(var(--primary)/0.15),transparent_50%),radial-gradient(circle_at_70%_50%,hsl(var(--accent)/0.1),transparent_50%)] animate-gradient-shift bg-[length:200%_200%]" />
+      
+      {/* Floating elements */}
+      <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-primary/10 rounded-full blur-3xl animate-float" />
+      <div className="absolute bottom-1/4 right-1/4 w-40 h-40 bg-accent/10 rounded-full blur-3xl animate-float" style={{ animationDelay: "1s" }} />
       
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-4xl mx-auto text-center space-y-8">
@@ -51,8 +55,8 @@ const Hero = () => {
             </Button>
           </div>
 
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-            <ArrowDown className="w-6 h-6 text-primary" />
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce cursor-pointer" onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}>
+            <ArrowDown className="w-6 h-6 text-primary animate-pulse-slow" />
           </div>
         </div>
       </div>

@@ -1,12 +1,16 @@
 import { GraduationCap } from "lucide-react";
+import { useScrollAnimation } from "@/hooks/use-scroll-animation";
+import { cn } from "@/lib/utils";
 
 const Education = () => {
+  const { ref: sectionRef, isVisible } = useScrollAnimation();
+  
   const education = [
     {
       degree: "Licence Professionnelle",
       field: "Développement Mobile",
       duration: "1 an",
-      year: "Bachelor",
+      year: "Bachelor FEDE",
       gradient: "from-primary to-cyan-500"
     },
     {
@@ -19,8 +23,11 @@ const Education = () => {
   ];
 
   return (
-    <section id="education" className="py-24">
-      <div className="container mx-auto px-6">
+    <section id="education" className="py-24 relative overflow-hidden">
+      {/* Floating decorations */}
+      <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/5 rounded-full blur-3xl animate-float" style={{ animationDelay: "0.5s" }} />
+      
+      <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 space-y-4">
             <h2 className="text-4xl md:text-5xl font-bold">
@@ -31,17 +38,21 @@ const Education = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div ref={sectionRef} className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {education.map((edu, index) => (
               <div
                 key={index}
-                className="group relative overflow-hidden rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-soft animate-fade-in-up"
-                style={{ animationDelay: `${index * 0.2}s` }}
+                className={cn(
+                  "group relative overflow-hidden rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-500 hover:shadow-soft hover:scale-105",
+                  isVisible ? "opacity-100 translate-x-0" : "opacity-0",
+                  index === 0 ? "-translate-x-10" : "translate-x-10"
+                )}
+                style={{ transitionDelay: `${index * 0.2}s` }}
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${edu.gradient} opacity-5 group-hover:opacity-10 transition-opacity duration-300`} />
                 
                 <div className="relative p-8 space-y-4">
-                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center group-hover:scale-110 group-hover:rotate-12 transition-all duration-300 animate-glow">
                     <GraduationCap className="w-7 h-7 text-white" />
                   </div>
 

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Hero from "@/components/portfolio/Hero";
 import About from "@/components/portfolio/About";
 import Education from "@/components/portfolio/Education";
+import Certifications from "@/components/portfolio/Certifications";
 import Skills from "@/components/portfolio/Skills";
 import Projects from "@/components/portfolio/Projects";
 import Contact from "@/components/portfolio/Contact";
@@ -12,7 +13,7 @@ const Index = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["home", "about", "education", "skills", "projects", "contact"];
+      const sections = ["home", "about", "education", "certifications", "skills", "projects", "contact"];
       const scrollPosition = window.scrollY + window.innerHeight / 3;
 
       for (const section of sections) {
@@ -37,6 +38,7 @@ const Index = () => {
       <Hero />
       <About />
       <Education />
+      <Certifications />
       <Skills />
       <Projects />
       <Contact />

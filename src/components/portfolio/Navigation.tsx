@@ -27,6 +27,7 @@ const Navigation = ({ activeSection }: NavigationProps) => {
     { id: "home", label: "Home" },
     { id: "about", label: "About" },
     { id: "education", label: "Education" },
+    { id: "certifications", label: "Certifications" },
     { id: "skills", label: "Skills" },
     { id: "projects", label: "Projects" },
     { id: "contact", label: "Contact" },

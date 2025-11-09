@@ -27,7 +27,10 @@ const Skills = () => {
   ];
 
   return (
-    <section id="skills" className="py-24 relative overflow-hidden">
+    <section id="skills" className="py-24 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
+      {/* Animated mesh background */}
+      <div className="absolute inset-0 bg-gradient-mesh opacity-10 animate-mesh-move" />
+      
       {/* Parallax background decorations */}
       <div 
         className="absolute top-0 left-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl animate-pulse-slow" 

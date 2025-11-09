@@ -27,6 +27,9 @@ const Education = () => {
 
   return (
     <section id="education" className="py-24 relative overflow-hidden">
+      {/* Dynamic background layers */}
+      <div className="absolute inset-0 bg-gradient-to-bl from-primary/5 via-transparent to-accent/5 animate-gradient-xy" />
+      
       {/* Parallax floating decorations */}
       <div 
         className="absolute bottom-0 left-0 w-64 h-64 bg-accent/5 rounded-full blur-3xl animate-float" 

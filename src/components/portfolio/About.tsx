@@ -27,7 +27,10 @@ const About = () => {
   ];
 
   return (
-    <section id="about" className="py-24 bg-muted/30 relative overflow-hidden">
+    <section id="about" className="py-24 relative overflow-hidden bg-gradient-to-b from-background via-muted/20 to-background">
+      {/* Dynamic mesh gradient background */}
+      <div className="absolute inset-0 bg-gradient-mesh opacity-10 animate-gradient-xy" />
+      
       {/* Parallax background decorations */}
       <div 
         className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse-slow" 

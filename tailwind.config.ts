@@ -63,6 +63,16 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      backgroundImage: {
+        'gradient-mesh': 'var(--gradient-mesh)',
+        'gradient-primary': 'var(--gradient-primary)',
+        'gradient-accent': 'var(--gradient-accent)',
+      },
+      boxShadow: {
+        'soft': 'var(--shadow-soft)',
+        'glow': 'var(--shadow-glow)',
+        'colored': 'var(--shadow-colored)',
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
@@ -107,6 +117,21 @@ export default {
         "gradient-shift": {
           "0%, 100%": { backgroundPosition: "0% 50%" },
           "50%": { backgroundPosition: "100% 50%" }
+        },
+        "mesh-move": {
+          "0%, 100%": { transform: "translate(0%, 0%) rotate(0deg)" },
+          "33%": { transform: "translate(5%, -5%) rotate(120deg)" },
+          "66%": { transform: "translate(-5%, 5%) rotate(240deg)" }
+        },
+        "gradient-xy": {
+          "0%, 100%": {
+            "background-size": "400% 400%",
+            "background-position": "left center"
+          },
+          "50%": {
+            "background-size": "200% 200%",
+            "background-position": "right center"
+          }
         }
       },
       animation: {
@@ -120,7 +145,9 @@ export default {
         "glow": "glow 2s ease-in-out infinite",
         "float": "float 3s ease-in-out infinite",
         "pulse-slow": "pulse-slow 3s ease-in-out infinite",
-        "gradient-shift": "gradient-shift 3s ease infinite"
+        "gradient-shift": "gradient-shift 3s ease infinite",
+        "mesh-move": "mesh-move 20s ease-in-out infinite",
+        "gradient-xy": "gradient-xy 15s ease infinite"
       },
     },
   },

@@ -38,6 +38,9 @@ const Projects = () => {
 
   return (
     <section id="projects" className="py-24 bg-muted/30 relative overflow-hidden">
+      {/* Dynamic gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 animate-gradient-xy" />
+      
       {/* Parallax floating decorations */}
       <div 
         className="absolute top-0 right-0 w-80 h-80 bg-primary/5 rounded-full blur-3xl animate-float" 

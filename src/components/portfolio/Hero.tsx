@@ -16,7 +16,8 @@ const Hero = () => {
       id="home"
       className="min-h-screen flex items-center justify-center relative overflow-hidden"
     >
-      {/* Animated background gradient */}
+      {/* Dynamic mesh gradient background */}
+      <div className="absolute inset-0 bg-gradient-mesh opacity-30 animate-mesh-move blur-3xl" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,hsl(var(--primary)/0.15),transparent_50%),radial-gradient(circle_at_70%_50%,hsl(var(--accent)/0.1),transparent_50%)] animate-gradient-shift bg-[length:200%_200%]" />
       
       {/* Parallax floating elements */}

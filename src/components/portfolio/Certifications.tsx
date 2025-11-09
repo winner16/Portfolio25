@@ -55,6 +55,9 @@ const Certifications = () => {
 
   return (
     <section id="certifications" className="py-24 bg-muted/30 relative overflow-hidden">
+      {/* Dynamic gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-accent/5 via-transparent to-primary/5 animate-gradient-xy" />
+      
       {/* Parallax background decorations */}
       <div 
         className="absolute top-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse-slow" 

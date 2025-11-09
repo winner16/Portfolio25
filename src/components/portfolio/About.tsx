@@ -1,9 +1,12 @@
 import { Code, Palette, Sparkles } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
+import { useParallax } from "@/hooks/use-parallax";
 import { cn } from "@/lib/utils";
 
 const About = () => {
   const { ref: sectionRef, isVisible } = useScrollAnimation();
+  const parallaxSlow = useParallax(0.2);
+  const parallaxFast = useParallax(0.6);
   
   const features = [
     {
@@ -25,8 +28,15 @@ const About = () => {
 
   return (
     <section id="about" className="py-24 bg-muted/30 relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse-slow" />
+      {/* Parallax background decorations */}
+      <div 
+        className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse-slow" 
+        style={{ transform: `translateY(${parallaxSlow}px)` }}
+      />
+      <div 
+        className="absolute bottom-0 left-0 w-72 h-72 bg-accent/5 rounded-full blur-3xl" 
+        style={{ transform: `translateY(${parallaxFast}px)` }}
+      />
       
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-6xl mx-auto">

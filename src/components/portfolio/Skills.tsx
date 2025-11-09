@@ -1,8 +1,11 @@
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
+import { useParallax } from "@/hooks/use-parallax";
 import { cn } from "@/lib/utils";
 
 const Skills = () => {
   const { ref: sectionRef, isVisible } = useScrollAnimation();
+  const parallaxSlow = useParallax(0.25);
+  const parallaxMedium = useParallax(0.4);
   
   const skillCategories = [
     {
@@ -25,8 +28,15 @@ const Skills = () => {
 
   return (
     <section id="skills" className="py-24 relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute top-1/2 right-0 w-80 h-80 bg-primary/5 rounded-full blur-3xl animate-pulse-slow" />
+      {/* Parallax background decorations */}
+      <div 
+        className="absolute top-0 left-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl animate-pulse-slow" 
+        style={{ transform: `translateY(${parallaxSlow}px)` }}
+      />
+      <div 
+        className="absolute bottom-0 right-0 w-80 h-80 bg-primary/5 rounded-full blur-3xl" 
+        style={{ transform: `translateY(${parallaxMedium}px)` }}
+      />
       
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-6xl mx-auto">

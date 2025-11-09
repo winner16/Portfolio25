@@ -1,9 +1,12 @@
 import { GraduationCap } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
+import { useParallax } from "@/hooks/use-parallax";
 import { cn } from "@/lib/utils";
 
 const Education = () => {
   const { ref: sectionRef, isVisible } = useScrollAnimation();
+  const parallaxSlow = useParallax(0.3);
+  const parallaxFast = useParallax(0.5);
   
   const education = [
     {
@@ -24,8 +27,15 @@ const Education = () => {
 
   return (
     <section id="education" className="py-24 relative overflow-hidden">
-      {/* Floating decorations */}
-      <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/5 rounded-full blur-3xl animate-float" style={{ animationDelay: "0.5s" }} />
+      {/* Parallax floating decorations */}
+      <div 
+        className="absolute bottom-0 left-0 w-64 h-64 bg-accent/5 rounded-full blur-3xl animate-float" 
+        style={{ transform: `translateY(${parallaxFast}px)`, animationDelay: "0.5s" }}
+      />
+      <div 
+        className="absolute top-0 right-0 w-80 h-80 bg-primary/5 rounded-full blur-3xl" 
+        style={{ transform: `translateY(${parallaxSlow}px)` }}
+      />
       
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-6xl mx-auto">

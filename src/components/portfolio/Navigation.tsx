@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 interface NavigationProps {
   activeSection: string;
@@ -51,26 +52,29 @@ const Navigation = ({ activeSection }: NavigationProps) => {
             BA
           </button>
           
-          <ul className="hidden md:flex items-center gap-8">
-            {navItems.map((item) => (
-              <li key={item.id}>
-                <button
-                  onClick={() => scrollToSection(item.id)}
-                  className={cn(
-                    "relative text-sm font-medium transition-colors hover:text-primary",
-                    activeSection === item.id
-                      ? "text-primary"
-                      : "text-muted-foreground"
-                  )}
-                >
-                  {item.label}
-                  {activeSection === item.id && (
-                    <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary animate-slide-in-left" />
-                  )}
-                </button>
-              </li>
-            ))}
-          </ul>
+          <div className="flex items-center gap-4">
+            <ul className="hidden md:flex items-center gap-8">
+              {navItems.map((item) => (
+                <li key={item.id}>
+                  <button
+                    onClick={() => scrollToSection(item.id)}
+                    className={cn(
+                      "relative text-sm font-medium transition-colors hover:text-primary",
+                      activeSection === item.id
+                        ? "text-primary"
+                        : "text-muted-foreground"
+                    )}
+                  >
+                    {item.label}
+                    {activeSection === item.id && (
+                      <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary animate-slide-in-left" />
+                    )}
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <ThemeToggle />
+          </div>
         </div>
       </div>
     </nav>

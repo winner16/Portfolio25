@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { z } from "zod";
 
 interface Project {
   title: string;
@@ -25,6 +26,14 @@ interface Project {
   githubUrl?: string;
   demoUrl?: string;
 }
+
+const projectSchema = z.object({
+  title: z.string().trim().min(1, "Le titre est requis").max(100, "Le titre doit faire moins de 100 caractères"),
+  description: z.string().trim().min(1, "La description est requise").max(500, "La description doit faire moins de 500 caractères"),
+  tags: z.string().max(200, "Les tags doivent faire moins de 200 caractères"),
+  githubUrl: z.string().url("URL GitHub invalide").or(z.literal("")),
+  demoUrl: z.string().url("URL Demo invalide").or(z.literal("")),
+});
 
 const Projects = () => {
   const { ref: sectionRef, isVisible } = useScrollAnimation();
@@ -38,25 +47,25 @@ const Projects = () => {
       title: "E-Commerce Platform",
       description: "A modern e-commerce solution with real-time inventory management, secure payments, and responsive design.",
       tags: ["React", "Node.js", "PostgreSQL", "Stripe"],
-      gradient: "from-blue-500 to-cyan-500"
+      gradient: "from-primary to-primary/80"
     },
     {
       title: "Portfolio Dashboard",
       description: "Analytics dashboard for tracking portfolio performance with interactive charts and data visualization.",
       tags: ["Next.js", "TypeScript", "Recharts", "Tailwind"],
-      gradient: "from-purple-500 to-pink-500"
+      gradient: "from-accent to-accent/80"
     },
     {
       title: "Social Media App",
       description: "Full-stack social platform with real-time messaging, post sharing, and user interactions.",
       tags: ["React", "Firebase", "Redux", "Material-UI"],
-      gradient: "from-orange-500 to-red-500"
+      gradient: "from-primary via-accent to-primary"
     },
     {
       title: "Task Management Tool",
       description: "Collaborative task manager with drag-and-drop interface, team collaboration, and deadline tracking.",
       tags: ["Vue.js", "Express", "MongoDB", "Socket.io"],
-      gradient: "from-green-500 to-emerald-500"
+      gradient: "from-accent via-primary to-accent"
     }
   ]);
 
@@ -69,41 +78,44 @@ const Projects = () => {
   });
 
   const handleAddProject = () => {
-    if (!newProject.title || !newProject.description) {
+    try {
+      const validated = projectSchema.parse(newProject);
+
+      const gradients = [
+        "from-primary to-primary/80",
+        "from-accent to-accent/80",
+        "from-primary via-accent to-primary",
+        "from-accent via-primary to-accent",
+        "from-primary/90 to-accent/90",
+        "from-accent/90 to-primary/90",
+      ];
+
+      const project: Project = {
+        title: validated.title,
+        description: validated.description,
+        tags: validated.tags ? validated.tags.split(",").map(tag => tag.trim()).filter(tag => tag) : [],
+        gradient: gradients[Math.floor(Math.random() * gradients.length)],
+        githubUrl: validated.githubUrl || undefined,
+        demoUrl: validated.demoUrl || undefined,
+      };
+
+      setProjects([...projects, project]);
+      setNewProject({ title: "", description: "", tags: "", githubUrl: "", demoUrl: "" });
+      setOpen(false);
+      
       toast({
-        title: "Erreur",
-        description: "Le titre et la description sont requis",
-        variant: "destructive",
+        title: "Projet ajouté !",
+        description: "Votre projet a été ajouté avec succès",
       });
-      return;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        toast({
+          title: "Erreur de validation",
+          description: error.errors[0].message,
+          variant: "destructive",
+        });
+      }
     }
-
-    const gradients = [
-      "from-blue-500 to-cyan-500",
-      "from-purple-500 to-pink-500",
-      "from-orange-500 to-red-500",
-      "from-green-500 to-emerald-500",
-      "from-indigo-500 to-violet-500",
-      "from-yellow-500 to-amber-500",
-    ];
-
-    const project: Project = {
-      title: newProject.title,
-      description: newProject.description,
-      tags: newProject.tags.split(",").map(tag => tag.trim()),
-      gradient: gradients[Math.floor(Math.random() * gradients.length)],
-      githubUrl: newProject.githubUrl,
-      demoUrl: newProject.demoUrl,
-    };
-
-    setProjects([...projects, project]);
-    setNewProject({ title: "", description: "", tags: "", githubUrl: "", demoUrl: "" });
-    setOpen(false);
-    
-    toast({
-      title: "Projet ajouté !",
-      description: "Votre projet a été ajouté avec succès",
-    });
   };
 
   return (
@@ -152,6 +164,8 @@ const Projects = () => {
                         value={newProject.title}
                         onChange={(e) => setNewProject({ ...newProject, title: e.target.value })}
                         placeholder="Mon super projet"
+                        maxLength={100}
+                        required
                       />
                     </div>
                     <div className="grid gap-2">
@@ -162,6 +176,8 @@ const Projects = () => {
                         onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
                         placeholder="Une description détaillée du projet..."
                         rows={3}
+                        maxLength={500}
+                        required
                       />
                     </div>
                     <div className="grid gap-2">
@@ -171,12 +187,14 @@ const Projects = () => {
                         value={newProject.tags}
                         onChange={(e) => setNewProject({ ...newProject, tags: e.target.value })}
                         placeholder="React, Node.js, MongoDB"
+                        maxLength={200}
                       />
                     </div>
                     <div className="grid gap-2">
                       <Label htmlFor="github">URL GitHub</Label>
                       <Input
                         id="github"
+                        type="url"
                         value={newProject.githubUrl}
                         onChange={(e) => setNewProject({ ...newProject, githubUrl: e.target.value })}
                         placeholder="https://github.com/..."
@@ -186,6 +204,7 @@ const Projects = () => {
                       <Label htmlFor="demo">URL Demo</Label>
                       <Input
                         id="demo"
+                        type="url"
                         value={newProject.demoUrl}
                         onChange={(e) => setNewProject({ ...newProject, demoUrl: e.target.value })}
                         placeholder="https://..."

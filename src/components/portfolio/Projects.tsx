@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { useParallax } from "@/hooks/use-parallax";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -45,6 +45,35 @@ const projectSchema = z.object({
   demoUrl: z.string().url("URL Demo invalide").or(z.literal("")),
 });
 
+const DEFAULT_PROJECTS: Project[] = [
+  {
+    title: "E-Commerce Platform",
+    description: "A modern e-commerce solution with real-time inventory management, secure payments, and responsive design.",
+    tags: ["React", "Node.js", "PostgreSQL", "Stripe"],
+    gradient: "from-primary to-primary/80"
+  },
+  {
+    title: "Portfolio Dashboard",
+    description: "Analytics dashboard for tracking portfolio performance with interactive charts and data visualization.",
+    tags: ["Next.js", "TypeScript", "Recharts", "Tailwind"],
+    gradient: "from-accent to-accent/80"
+  },
+  {
+    title: "Social Media App",
+    description: "Full-stack social platform with real-time messaging, post sharing, and user interactions.",
+    tags: ["React", "Firebase", "Redux", "Material-UI"],
+    gradient: "from-primary via-accent to-primary"
+  },
+  {
+    title: "Task Management Tool",
+    description: "Collaborative task manager with drag-and-drop interface, team collaboration, and deadline tracking.",
+    tags: ["Vue.js", "Express", "MongoDB", "Socket.io"],
+    gradient: "from-accent via-primary to-accent"
+  }
+];
+
+const STORAGE_KEY = "portfolio-custom-projects";
+
 const Projects = () => {
   const { ref: sectionRef, isVisible } = useScrollAnimation();
   const parallaxSlow = useParallax(0.2);
@@ -54,32 +83,32 @@ const Projects = () => {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
   
-  const [projects, setProjects] = useState<Project[]>([
-    {
-      title: "E-Commerce Platform",
-      description: "A modern e-commerce solution with real-time inventory management, secure payments, and responsive design.",
-      tags: ["React", "Node.js", "PostgreSQL", "Stripe"],
-      gradient: "from-primary to-primary/80"
-    },
-    {
-      title: "Portfolio Dashboard",
-      description: "Analytics dashboard for tracking portfolio performance with interactive charts and data visualization.",
-      tags: ["Next.js", "TypeScript", "Recharts", "Tailwind"],
-      gradient: "from-accent to-accent/80"
-    },
-    {
-      title: "Social Media App",
-      description: "Full-stack social platform with real-time messaging, post sharing, and user interactions.",
-      tags: ["React", "Firebase", "Redux", "Material-UI"],
-      gradient: "from-primary via-accent to-primary"
-    },
-    {
-      title: "Task Management Tool",
-      description: "Collaborative task manager with drag-and-drop interface, team collaboration, and deadline tracking.",
-      tags: ["Vue.js", "Express", "MongoDB", "Socket.io"],
-      gradient: "from-accent via-primary to-accent"
+  const [customProjects, setCustomProjects] = useState<Project[]>([]);
+
+  // Charger les projets personnalisés depuis localStorage
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        setCustomProjects(parsed);
+      }
+    } catch (error) {
+      console.error("Erreur lors du chargement des projets:", error);
     }
-  ]);
+  }, []);
+
+  // Sauvegarder les projets personnalisés dans localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(customProjects));
+    } catch (error) {
+      console.error("Erreur lors de la sauvegarde des projets:", error);
+    }
+  }, [customProjects]);
+
+  // Combiner les projets par défaut avec les projets personnalisés
+  const allProjects = [...DEFAULT_PROJECTS, ...customProjects];
 
   const [newProject, setNewProject] = useState({
     title: "",
@@ -112,15 +141,20 @@ const Projects = () => {
       };
 
       if (editingIndex !== null) {
-        const updatedProjects = [...projects];
-        updatedProjects[editingIndex] = project;
-        setProjects(updatedProjects);
-        toast({
-          title: "Projet modifié !",
-          description: "Votre projet a été modifié avec succès",
-        });
+        // Modification d'un projet personnalisé (index ajusté)
+        const customIndex = editingIndex - DEFAULT_PROJECTS.length;
+        if (customIndex >= 0) {
+          const updatedCustomProjects = [...customProjects];
+          updatedCustomProjects[customIndex] = project;
+          setCustomProjects(updatedCustomProjects);
+          toast({
+            title: "Projet modifié !",
+            description: "Votre projet a été modifié avec succès",
+          });
+        }
       } else {
-        setProjects([...projects, project]);
+        // Ajout d'un nouveau projet
+        setCustomProjects([...customProjects, project]);
         toast({
           title: "Projet ajouté !",
           description: "Votre projet a été ajouté avec succès",
@@ -142,7 +176,17 @@ const Projects = () => {
   };
 
   const handleEditProject = (index: number) => {
-    const project = projects[index];
+    // Seuls les projets personnalisés peuvent être édités
+    if (index < DEFAULT_PROJECTS.length) {
+      toast({
+        title: "Action non autorisée",
+        description: "Les projets par défaut ne peuvent pas être modifiés",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const project = allProjects[index];
     setNewProject({
       title: project.title,
       description: project.description,
@@ -155,8 +199,20 @@ const Projects = () => {
   };
 
   const handleDeleteProject = (index: number) => {
-    const updatedProjects = projects.filter((_, i) => i !== index);
-    setProjects(updatedProjects);
+    // Seuls les projets personnalisés peuvent être supprimés
+    if (index < DEFAULT_PROJECTS.length) {
+      toast({
+        title: "Action non autorisée",
+        description: "Les projets par défaut ne peuvent pas être supprimés",
+        variant: "destructive",
+      });
+      setDeleteIndex(null);
+      return;
+    }
+
+    const customIndex = index - DEFAULT_PROJECTS.length;
+    const updatedCustomProjects = customProjects.filter((_, i) => i !== customIndex);
+    setCustomProjects(updatedCustomProjects);
     setDeleteIndex(null);
     toast({
       title: "Projet supprimé !",
@@ -295,7 +351,7 @@ const Projects = () => {
           </div>
 
           <div ref={sectionRef} className="grid md:grid-cols-2 gap-8">
-            {projects.map((project, index) => (
+            {allProjects.map((project, index) => (
               <div
                 key={index}
                 className={cn(
@@ -351,24 +407,26 @@ const Projects = () => {
                         </Button>
                       )}
                     </div>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="hover:bg-primary/10 hover:text-primary transition-all duration-300"
-                        onClick={() => handleEditProject(index)}
-                      >
-                        <Edit className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="hover:bg-destructive/10 hover:text-destructive transition-all duration-300"
-                        onClick={() => setDeleteIndex(index)}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
+                    {index >= DEFAULT_PROJECTS.length && (
+                      <div className="flex gap-2">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="hover:bg-primary/10 hover:text-primary transition-all duration-300"
+                          onClick={() => handleEditProject(index)}
+                        >
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="hover:bg-destructive/10 hover:text-destructive transition-all duration-300"
+                          onClick={() => setDeleteIndex(index)}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

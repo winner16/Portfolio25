@@ -1,4 +1,4 @@
-import { ExternalLink, Github, Plus } from "lucide-react";
+import { ExternalLink, Github, Plus, Trash2, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { useParallax } from "@/hooks/use-parallax";
@@ -17,6 +17,16 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface Project {
   title: string;
@@ -41,6 +51,8 @@ const Projects = () => {
   const parallaxFast = useParallax(0.5);
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
   
   const [projects, setProjects] = useState<Project[]>([
     {
@@ -99,14 +111,25 @@ const Projects = () => {
         demoUrl: validated.demoUrl || undefined,
       };
 
-      setProjects([...projects, project]);
+      if (editingIndex !== null) {
+        const updatedProjects = [...projects];
+        updatedProjects[editingIndex] = project;
+        setProjects(updatedProjects);
+        toast({
+          title: "Projet modifié !",
+          description: "Votre projet a été modifié avec succès",
+        });
+      } else {
+        setProjects([...projects, project]);
+        toast({
+          title: "Projet ajouté !",
+          description: "Votre projet a été ajouté avec succès",
+        });
+      }
+
       setNewProject({ title: "", description: "", tags: "", githubUrl: "", demoUrl: "" });
+      setEditingIndex(null);
       setOpen(false);
-      
-      toast({
-        title: "Projet ajouté !",
-        description: "Votre projet a été ajouté avec succès",
-      });
     } catch (error) {
       if (error instanceof z.ZodError) {
         toast({
@@ -116,6 +139,29 @@ const Projects = () => {
         });
       }
     }
+  };
+
+  const handleEditProject = (index: number) => {
+    const project = projects[index];
+    setNewProject({
+      title: project.title,
+      description: project.description,
+      tags: project.tags.join(", "),
+      githubUrl: project.githubUrl || "",
+      demoUrl: project.demoUrl || "",
+    });
+    setEditingIndex(index);
+    setOpen(true);
+  };
+
+  const handleDeleteProject = (index: number) => {
+    const updatedProjects = projects.filter((_, i) => i !== index);
+    setProjects(updatedProjects);
+    setDeleteIndex(null);
+    toast({
+      title: "Projet supprimé !",
+      description: "Le projet a été supprimé avec succès",
+    });
   };
 
   return (
@@ -140,7 +186,13 @@ const Projects = () => {
               <h2 className="text-4xl md:text-5xl font-bold">
                 Featured <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Projects</span>
               </h2>
-              <Dialog open={open} onOpenChange={setOpen}>
+              <Dialog open={open} onOpenChange={(isOpen) => {
+                setOpen(isOpen);
+                if (!isOpen) {
+                  setEditingIndex(null);
+                  setNewProject({ title: "", description: "", tags: "", githubUrl: "", demoUrl: "" });
+                }
+              }}>
                 <DialogTrigger asChild>
                   <Button 
                     size="icon"
@@ -151,9 +203,9 @@ const Projects = () => {
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[525px]">
                   <DialogHeader>
-                    <DialogTitle>Ajouter un projet</DialogTitle>
+                    <DialogTitle>{editingIndex !== null ? "Modifier le projet" : "Ajouter un projet"}</DialogTitle>
                     <DialogDescription>
-                      Ajoutez un nouveau projet à votre portfolio
+                      {editingIndex !== null ? "Modifiez les informations du projet" : "Ajoutez un nouveau projet à votre portfolio"}
                     </DialogDescription>
                   </DialogHeader>
                   <div className="grid gap-4 py-4">
@@ -212,10 +264,30 @@ const Projects = () => {
                     </div>
                   </div>
                   <Button onClick={handleAddProject} className="bg-gradient-to-r from-primary to-accent hover:shadow-glow">
-                    Ajouter le projet
+                    {editingIndex !== null ? "Enregistrer les modifications" : "Ajouter le projet"}
                   </Button>
                 </DialogContent>
               </Dialog>
+              
+              <AlertDialog open={deleteIndex !== null} onOpenChange={(isOpen) => !isOpen && setDeleteIndex(null)}>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Êtes-vous sûr ?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Cette action est irréversible. Le projet sera définitivement supprimé.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Annuler</AlertDialogCancel>
+                    <AlertDialogAction 
+                      onClick={() => deleteIndex !== null && handleDeleteProject(deleteIndex)}
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    >
+                      Supprimer
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
               Some of my recent work showcasing my skills and creativity
@@ -255,28 +327,48 @@ const Projects = () => {
                     ))}
                   </div>
 
-                  <div className="flex gap-3 pt-4">
-                    {project.githubUrl && (
+                  <div className="flex justify-between items-center gap-3 pt-4">
+                    <div className="flex gap-3">
+                      {project.githubUrl && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="border-primary text-primary hover:bg-primary/10 hover:scale-105 transition-all duration-300"
+                          onClick={() => window.open(project.githubUrl, "_blank")}
+                        >
+                          <Github className="w-4 h-4 mr-2" />
+                          Code
+                        </Button>
+                      )}
+                      {project.demoUrl && (
+                        <Button
+                          size="sm"
+                          className="bg-gradient-to-r from-primary to-accent hover:shadow-glow hover:scale-105 transition-all duration-300"
+                          onClick={() => window.open(project.demoUrl, "_blank")}
+                        >
+                          <ExternalLink className="w-4 h-4 mr-2" />
+                          Demo
+                        </Button>
+                      )}
+                    </div>
+                    <div className="flex gap-2">
                       <Button
-                        variant="outline"
-                        size="sm"
-                        className="border-primary text-primary hover:bg-primary/10 hover:scale-105 transition-all duration-300"
-                        onClick={() => window.open(project.githubUrl, "_blank")}
+                        variant="ghost"
+                        size="icon"
+                        className="hover:bg-primary/10 hover:text-primary transition-all duration-300"
+                        onClick={() => handleEditProject(index)}
                       >
-                        <Github className="w-4 h-4 mr-2" />
-                        Code
+                        <Edit className="w-4 h-4" />
                       </Button>
-                    )}
-                    {project.demoUrl && (
                       <Button
-                        size="sm"
-                        className="bg-gradient-to-r from-primary to-accent hover:shadow-glow hover:scale-105 transition-all duration-300"
-                        onClick={() => window.open(project.demoUrl, "_blank")}
+                        variant="ghost"
+                        size="icon"
+                        className="hover:bg-destructive/10 hover:text-destructive transition-all duration-300"
+                        onClick={() => setDeleteIndex(index)}
                       >
-                        <ExternalLink className="w-4 h-4 mr-2" />
-                        Demo
+                        <Trash2 className="w-4 h-4" />
                       </Button>
-                    )}
+                    </div>
                   </div>
                 </div>
               </div>

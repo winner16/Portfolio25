@@ -5,6 +5,7 @@ import Education from "@/components/portfolio/Education";
 import Certifications from "@/components/portfolio/Certifications";
 import Skills from "@/components/portfolio/Skills";
 import Projects from "@/components/portfolio/Projects";
+import Testimonials from "@/components/portfolio/Testimonials";
 import Contact from "@/components/portfolio/Contact";
 import Navigation from "@/components/portfolio/Navigation";
 
@@ -13,7 +14,7 @@ const Index = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["home", "about", "education", "certifications", "skills", "projects", "contact"];
+      const sections = ["home", "about", "education", "certifications", "skills", "projects", "testimonials", "contact"];
       const scrollPosition = window.scrollY + window.innerHeight / 3;
 
       for (const section of sections) {
@@ -41,6 +42,7 @@ const Index = () => {
       <Certifications />
       <Skills />
       <Projects />
+      <Testimonials />
       <Contact />
     </div>
   );

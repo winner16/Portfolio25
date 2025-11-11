@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Menu, X } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 
 interface NavigationProps {
   activeSection: string;
@@ -8,6 +15,7 @@ interface NavigationProps {
 
 const Navigation = ({ activeSection }: NavigationProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,6 +29,7 @@ const Navigation = ({ activeSection }: NavigationProps) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
+      setIsMobileMenuOpen(false);
     }
   };
 
@@ -73,10 +82,49 @@ const Navigation = ({ activeSection }: NavigationProps) => {
                 </li>
               ))}
             </ul>
+            
             <ThemeToggle />
+            
+            <button
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="md:hidden p-2 hover:bg-accent/50 rounded-md transition-colors"
+              aria-label="Open menu"
+            >
+              <Menu className="h-6 w-6" />
+            </button>
           </div>
         </div>
       </div>
+
+      <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+        <SheetContent side="right" className="w-[280px] sm:w-[320px]">
+          <SheetHeader>
+            <SheetTitle className="text-left bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              Menu
+            </SheetTitle>
+          </SheetHeader>
+          
+          <nav className="mt-8">
+            <ul className="flex flex-col gap-4">
+              {navItems.map((item) => (
+                <li key={item.id}>
+                  <button
+                    onClick={() => scrollToSection(item.id)}
+                    className={cn(
+                      "w-full text-left px-4 py-3 rounded-lg text-base font-medium transition-all duration-200",
+                      activeSection === item.id
+                        ? "bg-primary/10 text-primary border-l-4 border-primary"
+                        : "text-muted-foreground hover:bg-accent/50 hover:text-foreground border-l-4 border-transparent"
+                    )}
+                  >
+                    {item.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </SheetContent>
+      </Sheet>
     </nav>
   );
 };

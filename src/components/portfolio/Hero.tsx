@@ -17,8 +17,8 @@ const Hero = () => {
       className="min-h-screen flex items-center justify-center relative overflow-hidden"
     >
       {/* Dynamic mesh gradient background */}
-      <div className="absolute inset-0 bg-gradient-mesh opacity-30 animate-mesh-move blur-3xl" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,hsl(var(--primary)/0.15),transparent_50%),radial-gradient(circle_at_70%_50%,hsl(var(--accent)/0.1),transparent_50%)] animate-gradient-shift bg-[length:200%_200%]" />
+      <div className="absolute inset-0 bg-gradient-mesh opacity-30 dark:opacity-50 animate-mesh-move blur-3xl" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,hsl(var(--primary)/0.15),transparent_50%),radial-gradient(circle_at_70%_50%,hsl(var(--accent)/0.1),transparent_50%)] dark:bg-[radial-gradient(circle_at_30%_50%,hsl(var(--primary)/0.25),transparent_50%),radial-gradient(circle_at_70%_50%,hsl(var(--accent)/0.2),transparent_50%)] animate-gradient-shift bg-[length:200%_200%]" />
       
       {/* Parallax floating elements */}
       <div 
@@ -57,7 +57,7 @@ const Hero = () => {
             <Button
               onClick={scrollToContact}
               size="lg"
-              className="bg-gradient-to-r from-primary to-accent hover:shadow-glow transition-all duration-300"
+              className="bg-gradient-to-r from-primary to-accent hover:shadow-glow transition-all duration-300 dark:shadow-card-glow"
             >
               Get In Touch
             </Button>
@@ -65,7 +65,7 @@ const Hero = () => {
               variant="outline"
               size="lg"
               onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}
-              className="border-primary text-primary hover:bg-primary/10"
+              className="border-2 border-primary text-primary hover:bg-primary/10 dark:hover:bg-primary/20 dark:hover:shadow-border-glow transition-all duration-300"
             >
               View Projects
             </Button>

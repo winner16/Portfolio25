@@ -57,7 +57,7 @@ const About = () => {
               <div
                 key={index}
                 className={cn(
-                  "group p-8 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-500 hover:shadow-soft hover:-translate-y-2",
+                  "group p-8 rounded-2xl bg-card border-2 border-border hover:border-primary/60 transition-all duration-500 hover:shadow-card-glow hover:-translate-y-2 dark:hover:shadow-glow",
                   isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
                 )}
                 style={{ 
@@ -65,10 +65,10 @@ const About = () => {
                   animationDelay: `${index * 0.1}s` 
                 }}
               >
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-glow">
                   <feature.icon className="w-7 h-7 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
+                <h3 className="text-xl font-semibold mb-3 text-foreground">{feature.title}</h3>
                 <p className="text-muted-foreground leading-relaxed">
                   {feature.description}
                 </p>
@@ -77,12 +77,12 @@ const About = () => {
           </div>
 
           <div className={cn(
-            "bg-card border border-border rounded-2xl p-8 md:p-12 transition-all duration-700",
+            "bg-card border-2 border-border rounded-2xl p-8 md:p-12 transition-all duration-700 dark:shadow-card-glow hover:border-primary/30",
             isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
           )}>
             <p className="text-lg leading-relaxed text-muted-foreground">
-              I'm a <span className="text-foreground font-semibold">Full Stack Developer</span> and{" "}
-              <span className="text-foreground font-semibold">UI/UX Designer</span> with a passion for
+              I'm a <span className="text-foreground font-semibold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Full Stack Developer</span> and{" "}
+              <span className="text-foreground font-semibold bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent">UI/UX Designer</span> with a passion for
               creating seamless digital experiences. I combine technical expertise with creative
               design thinking to build applications that are not only functional but also beautiful
               and intuitive. My goal is to bridge the gap between design and development, ensuring

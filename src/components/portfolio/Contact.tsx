@@ -60,7 +60,7 @@ const Contact = () => {
                     <a
                       key={index}
                       href={social.href}
-                      className="w-12 h-12 rounded-xl bg-muted hover:bg-primary hover:text-primary-foreground flex items-center justify-center transition-all duration-300 hover:scale-110"
+                      className="w-12 h-12 rounded-xl bg-muted border-2 border-border hover:bg-gradient-to-br hover:from-primary hover:to-accent hover:text-primary-foreground flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-glow dark:hover:shadow-border-glow"
                       aria-label={social.label}
                     >
                       <social.icon className="w-5 h-5" />
@@ -101,7 +101,7 @@ const Contact = () => {
               </div>
               <Button
                 type="submit"
-                className="w-full h-12 bg-gradient-to-r from-primary to-accent hover:shadow-glow transition-all duration-300"
+                className="w-full h-12 bg-gradient-to-r from-primary to-accent hover:shadow-glow dark:shadow-card-glow transition-all duration-300"
               >
                 <Send className="w-4 h-4 mr-2" />
                 Send Message

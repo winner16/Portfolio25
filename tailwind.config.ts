@@ -72,6 +72,8 @@ export default {
         'soft': 'var(--shadow-soft)',
         'glow': 'var(--shadow-glow)',
         'colored': 'var(--shadow-colored)',
+        'card-glow': 'var(--card-glow)',
+        'border-glow': 'var(--border-glow)',
       },
       keyframes: {
         "accordion-down": {

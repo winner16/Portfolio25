@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Github, Linkedin, Mail, Send } from "lucide-react";
+import { Github, Linkedin, Mail, Send, Twitter } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -25,6 +25,7 @@ const Contact = () => {
   const socialLinks = [
     { icon: Github, label: "GitHub", href: "#" },
     { icon: Linkedin, label: "LinkedIn", href: "#" },
+    { icon: Twitter, label: "Twitter", href: "https://x.com/ban.at" },
     { icon: Mail, label: "Email", href: "mailto:contact@banqouratika.com" }
   ];
 

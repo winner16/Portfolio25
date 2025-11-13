@@ -26,7 +26,7 @@ const Contact = () => {
     { icon: Github, label: "GitHub", href: "#" },
     { icon: Linkedin, label: "LinkedIn", href: "#" },
     { icon: Twitter, label: "Twitter", href: "https://x.com/ban.at" },
-    { icon: Mail, label: "Email", href: "mailto:contact@banqouratika.com" }
+    { icon: Mail, label: "Email", href: "mailto:banqoura@yahoo.fr" }
   ];
 
   return (

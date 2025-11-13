@@ -112,7 +112,7 @@ const Contact = () => {
 
           <div className="mt-16 pt-8 border-t border-border text-center">
             <p className="text-muted-foreground">
-              © 2024 BANQOUR ATIKA. All rights reserved.
+              © 2025-2026 BANQOUR ATIKA. All rights reserved.
             </p>
           </div>
         </div>
